@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var internshipTopicController_1 = require("../controllers/internshipTopicController");
+var router = (0, express_1.Router)();
+router.post("/", internshipTopicController_1.createInternshipTopic);
+router.get("/", internshipTopicController_1.getAllInternshipTopics);
+router.get("/:id", internshipTopicController_1.getInternshipTopicById);
+router.put("/:id", internshipTopicController_1.updateInternshipTopic);
+router.delete("/:id", internshipTopicController_1.deleteInternshipTopic);
+exports.default = router;
