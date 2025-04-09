@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Check, X } from "lucide-react";
 import { Program } from "../api/mockData";
 import { useNavigate } from "react-router-dom";
 import LatestNotification from "../components/LatestNotfication";
@@ -9,10 +9,10 @@ export function ProgramManagementDashboard() {
   const [programs, setPrograms] = useState([]);
   const [filteredPrograms, setFilteredPrograms] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
-  const [editingProgramId, setEditingProgramId] = useState(null); // Track the program being edited
-  const [editedProgram, setEditedProgram] = useState(null); // Store the edited program data
-  const [currentPage, setCurrentPage] = useState(1); // Track current page
-  const [itemsPerPage] = useState(3); // Set items per page to 3
+  const [editingProgramId, setEditingProgramId] = useState(null);
+  const [editedProgram, setEditedProgram] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(3);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function ProgramManagementDashboard() {
         program.id.toLowerCase().includes(term.toLowerCase())
     );
     setFilteredPrograms(filtered);
-    setCurrentPage(1); // Reset to first page on search
+    setCurrentPage(1);
   };
 
   const handleView = (programId) => {
@@ -46,7 +46,7 @@ export function ProgramManagementDashboard() {
 
   const handleEdit = (program) => {
     setEditingProgramId(program.id);
-    setEditedProgram({ ...program }); // Clone the program data for editing
+    setEditedProgram({ ...program });
   };
 
   const handleSave = () => {
@@ -60,11 +60,11 @@ export function ProgramManagementDashboard() {
         program.id === editingProgramId ? editedProgram : program
       )
     );
-    setEditingProgramId(null); // Exit edit mode
+    setEditingProgramId(null);
   };
 
   const handleCancel = () => {
-    setEditingProgramId(null); // Exit edit mode without saving
+    setEditingProgramId(null);
     setEditedProgram(null);
   };
 
@@ -72,7 +72,34 @@ export function ProgramManagementDashboard() {
     setEditedProgram((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Pagination Logic
+  const handleApprove = (programId) => {
+    console.log(`Approving program ${programId}`);
+    setPrograms((prevPrograms) =>
+      prevPrograms.map((program) =>
+        program.id === programId ? { ...program, status: 'approved' } : program
+      )
+    );
+    setFilteredPrograms((prevPrograms) =>
+      prevPrograms.map((program) =>
+        program.id === programId ? { ...program, status: 'approved' } : program
+      )
+    );
+  };
+
+  const handleDeny = (programId) => {
+    console.log(`Denying program ${programId}`);
+    setPrograms((prevPrograms) =>
+      prevPrograms.map((program) =>
+        program.id === programId ? { ...program, status: 'denied' } : program
+      )
+    );
+    setFilteredPrograms((prevPrograms) =>
+      prevPrograms.map((program) =>
+        program.id === programId ? { ...program, status: 'denied' } : program
+      )
+    );
+  };
+
   const indexOfLastProgram = currentPage * itemsPerPage;
   const indexOfFirstProgram = indexOfLastProgram - itemsPerPage;
   const currentPrograms = filteredPrograms.slice(
@@ -109,23 +136,24 @@ export function ProgramManagementDashboard() {
       </div>
 
       <div className="bg-white rounded-lg shadow-sm p-2">
-        <div className="">
+        <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="text-left border-b">
-                <th className="py-2">Program Name</th>
-                <th className="py-2">Program ID</th>
-                <th className="py-2 text-center">No. of Applications</th>
-                <th className="py-2 text-center">No. of Slots Remaining</th>
-                <th className="py-2">Actions</th>
+              <tr className="text-left border-b bg-gray-50">
+                <th className="px-4 py-3 font-semibold">Program Name</th>
+                <th className="px-4 py-3 font-semibold">Program ID</th>
+                <th className="px-4 py-3 font-semibold text-center">No. of Applications</th>
+                <th className="px-4 py-3 font-semibold text-center">No. of Slots Remaining</th>
+                <th className="px-4 py-3 font-semibold">Status</th>
+                <th className="px-4 py-3 font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody>
               {currentPrograms.map((program) => (
-                <tr key={program.id} className="border-b">
+                <tr key={program.id} className="border-b hover:bg-gray-50">
                   {editingProgramId === program.id ? (
                     <>
-                      <td className="py-2">
+                      <td className="px-4 py-3">
                         <input
                           type="text"
                           value={editedProgram.name}
@@ -135,7 +163,7 @@ export function ProgramManagementDashboard() {
                           className="border rounded px-2 py-1 w-full"
                         />
                       </td>
-                      <td className="py-2">
+                      <td className="px-4 py-3">
                         <input
                           type="text"
                           value={editedProgram.id}
@@ -145,27 +173,37 @@ export function ProgramManagementDashboard() {
                           className="border rounded px-2 py-1 w-full"
                         />
                       </td>
-                      <td className="py-2">
+                      <td className="px-4 py-3">
                         <input
                           type="number"
                           value={editedProgram.applications}
                           onChange={(e) =>
                             handleInputChange("applications", e.target.value)
                           }
-                          className="border rounded px-2 py-1 w-full"
+                          className="border rounded px-2 py-1 w-full text-center"
                         />
                       </td>
-                      <td className="py-2">
+                      <td className="px-4 py-3">
                         <input
                           type="text"
                           value={editedProgram.slotsRemaining}
                           onChange={(e) =>
                             handleInputChange("slotsRemaining", e.target.value)
                           }
+                          className="border rounded px-2 py-1 w-full text-center"
+                        />
+                      </td>
+                      <td className="px-4 py-3">
+                        <input
+                          type="text"
+                          value={editedProgram.status}
+                          onChange={(e) =>
+                            handleInputChange("status", e.target.value)
+                          }
                           className="border rounded px-2 py-1 w-full"
                         />
                       </td>
-                      <td className="py-2">
+                      <td className="px-4 py-3">
                         <div className="flex gap-2">
                           <button
                             className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
@@ -184,15 +222,26 @@ export function ProgramManagementDashboard() {
                     </>
                   ) : (
                     <>
-                      <td className="py-2">{program.name}</td>
-                      <td className="py-2">{program.id}</td>
-                      <td className="py-2 text-center">
+                      <td className="px-4 py-3">{program.name}</td>
+                      <td className="px-4 py-3">{program.id}</td>
+                      <td className="px-4 py-3 text-center">
                         {program.applications}
                       </td>
-                      <td className="py-2 text-center">
+                      <td className="px-4 py-3 text-center">
                         {program.slotsRemaining}
                       </td>
-                      <td className="py-2">
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-1 rounded-full text-sm ${
+                          program.status === 'approved' 
+                            ? 'bg-green-100 text-green-800'
+                            : program.status === 'denied'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {program.status || 'Pending'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
                         <div className="flex gap-2">
                           <button
                             className="px-3 py-1 bg-myBlue text-white rounded hover:bg-blue-600"
@@ -206,6 +255,20 @@ export function ProgramManagementDashboard() {
                           >
                             Update
                           </button>
+                          <button
+                            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-1"
+                            onClick={() => handleApprove(program.id)}
+                            disabled={program.status === 'approved'}
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
+                          <button
+                            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex items-center gap-1"
+                            onClick={() => handleDeny(program.id)}
+                            disabled={program.status === 'denied'}
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
                         </div>
                       </td>
                     </>
@@ -217,7 +280,6 @@ export function ProgramManagementDashboard() {
         </div>
       </div>
 
-      {/* Pagination Controls outside of table box */}
       <div className="mt-6 flex justify-between items-center">
         <div>
           Showing {currentPage * itemsPerPage - (itemsPerPage - 1)} to{" "}
@@ -246,3 +308,5 @@ export function ProgramManagementDashboard() {
     </div>
   );
 }
+
+export default ProgramManagementDashboard;

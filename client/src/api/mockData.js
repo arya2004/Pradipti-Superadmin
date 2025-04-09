@@ -183,11 +183,56 @@ export const roles = [
   { id: 'COORDINATOR', name: 'Program Coordinator' }
 ];
 
+export const mockAdminUsers = [
+  {
+    userName: "user-1",
+    userId: "U12345",
+    actions: "Delete Edit",
+    access: "Admin",
+  },
+  {
+    userName: "user-2",
+    userId: "U67890",
+    actions: "Delete Edit",
+    access: "Super Admin",
+  },
+  {
+    userName: "user-3",
+    userId: "U54321",
+    actions: "Delete Edit",
+    access: "Station Admin",
+  },
+  {
+    userName: "user-4",
+    userId: "U98765",
+    actions: "Delete Edit",
+    access: "Admin",
+  },
+  {
+    userName: "user-5",
+    userId: "U11223",
+    actions: "Delete Edit",
+    access: "Super Admin",
+  },
+  {
+    userName: "user-6",
+    userId: "U44556",
+    actions: "Delete Edit",
+    access: "Station Admin",
+  },
+];
+
+
 export const api = {
 
   async fetchCurrentUser() {
     await delay(500);
     return mockUser;
+  },
+
+  async fetchAdminUsers() {
+    await delay(500);
+    return mockAdminUsers;
   },
 
   async fetchNotifications() {

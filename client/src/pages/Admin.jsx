@@ -1,60 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LatestNotification from "../components/LatestNotfication";
+import { api } from "../api/mockData";
 
 export function Admin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredColleges, setFilteredColleges] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
-  const colleges = [
-    {
-      userName: "user-1",
-      userId: "U12345",
-      actions: "Delete Edit",
-      access: "Admin",
-    },
-    {
-      userName: "user-2",
-      userId: "U67890",
-      actions: "Delete Edit",
-      access: "User",
-    },
-    {
-      userName: "user-3",
-      userId: "U54321",
-      actions: "Delete Edit",
-      access: "Guest",
-    },
-    {
-      userName: "user-4",
-      userId: "U98765",
-      actions: "Delete Edit",
-      access: "Admin",
-    },
-    {
-      userName: "user-5",
-      userId: "U11223",
-      actions: "Delete Edit",
-      access: "User",
-    },
-    {
-      userName: "user-6",
-      userId: "U44556",
-      actions: "Delete Edit",
-      access: "User",
-    },
-  ];
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const data = await api.fetchAdminUsers();
+        setUsers(data);
+        setFilteredUsers(data);
+      } catch (err) {
+        setError("Failed to fetch users");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
-    setFilteredColleges(
-      colleges.filter((college) =>
-        college.userName.toLowerCase().includes(searchQuery.toLowerCase())
+    setFilteredUsers(
+      users.filter((user) =>
+        user.userName.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
-  }, [searchQuery]);
+  }, [searchQuery, users]);
+
+  if (loading) {
+    return (
+      <div className="p-6 md:p-8">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -113,22 +102,22 @@ export function Admin() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredColleges.map((college, index) => (
+                  {filteredUsers.map((user, index) => (
                     <tr
                       key={index}
                       className="border-t border-gray-200 hover:bg-gray-50"
                     >
                       <td className="py-3 px-4 text-sm text-gray-700">
-                        {college.userName}
+                        {user.userName}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
-                        {college.userId}
+                        {user.userId}
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-700">
                         <div>
                           <button
                             onClick={() =>
-                              alert(`Deleting user ${college.userName}`)
+                              alert(`Deleting user ${user.userName}`)
                             }
                             className="flex items-center space-x-1 hover:text-blue-700"
                           >
@@ -136,7 +125,7 @@ export function Admin() {
                           </button>
                           <button
                             onClick={() =>
-                              alert(`Editing user ${college.userName}`)
+                              alert(`Editing user ${user.userName}`)
                             }
                             className="flex items-center space-x-1 hover:text-blue-700"
                           >
@@ -145,7 +134,7 @@ export function Admin() {
                         </div>
                       </td>
                       <td className="py-3 px-4 text-sm text-blue-500">
-                        {college.access}
+                        {user.access}
                       </td>
                     </tr>
                   ))}

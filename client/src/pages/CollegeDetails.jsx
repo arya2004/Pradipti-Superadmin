@@ -453,9 +453,6 @@ export function CollegeDetails() {
                   College Admin
                 </th>
                 <th className="px-6 py-3 text-left text-xl font-sb text-black tracking-wider">
-                  College ID
-                </th>
-                <th className="px-6 py-3 text-left text-xl font-sb text-black tracking-wider">
                   Mail ID
                 </th>
                 <th className="px-6 py-3 text-left text-xl font-sb text-black tracking-wider">
@@ -468,9 +465,6 @@ export function CollegeDetails() {
                 <tr key={index} className="border-t border-gray-100">
                   <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-black">
                     {admin.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-black">
-                    {admin.id}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-lg font-sb text-black italic underline">
                     {admin.email}
