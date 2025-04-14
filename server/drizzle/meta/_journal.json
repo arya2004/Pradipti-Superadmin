@@ -8,6 +8,27 @@
       "when": 1738493170777,
       "tag": "0000_yellow_killer_shrike",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1744624749790,
+      "tag": "0001_wealthy_ares",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1744624959749,
+      "tag": "0002_broken_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1744626588409,
+      "tag": "0003_lush_morg",
+      "breakpoints": true
     }
   ]
 }
