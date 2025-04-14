@@ -2,30 +2,27 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json"; // Import generated Swagger JSON
 
-import userRoutes from "./routes/userRoutes";
-import authRoutes from "./routes/authenticate";
-import applicationRoutes from "./routes/applicationRoutes";
-import institutionRoutes from "./routes/institutionRoutes";
-import internshipProgramRoutes from "./routes/internshipProgramRoutes";
-import internshipTopicRoutes from "./routes/internshipTopicRoutes";
-import mouRoutes from "./routes/mouRoutes";
-import stationRoutes from "./routes/stationRoutes";
-import studentRoutes from "./routes/studentRoutes";
+import collegeRoutes from "./routes/college.routes";
+import collegeProgramRoutes from "./routes/collegeProgram.routes";
+import internProgramRoutes from "./routes/internProgram.routes";
+import programDetailsRoutes from "./routes/programDetails.routes";
+import studentsRoutes from "./routes/students.routes";
+import notificationsRoutes from "./routes/notifications.routes";
+import usersRoutes from "./routes/users.routes";
+
 
 const app = express();
 
 app.use(express.json());
 
 // Mount API routes
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/applications", applicationRoutes);
-app.use("/api/institutions", institutionRoutes);
-app.use("/api/internship-programs", internshipProgramRoutes);
-app.use("/api/internship-topics", internshipTopicRoutes);
-app.use("/api/mous", mouRoutes);
-app.use("/api/stations", stationRoutes);
-app.use("/api/students", studentRoutes);
+app.use("/colleges", collegeRoutes);
+app.use("/colleges", collegeProgramRoutes); // routes expecting /colleges/:collegeId/programs
+app.use("/intern-programs", internProgramRoutes);
+app.use("/program-details", programDetailsRoutes);
+app.use("/students", studentsRoutes);
+app.use("/notifications", notificationsRoutes);
+app.use("/users", usersRoutes);
 
 // Serve Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
