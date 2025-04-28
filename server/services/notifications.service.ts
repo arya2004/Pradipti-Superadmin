@@ -27,3 +27,7 @@ export const getNotificationById = async (notifId: string) => {
 export const getAllNotifications = async () => {
   return await db.select().from(notifications).execute();
 };
+
+export const deleteNotification = async (id: string) => {
+  return db.delete(notifications).where(eq(notifications.id, id));
+};
