@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as internProgramService from "../services/internProgram.service";
+import { updateInternProgram, deleteInternProgram } from '../services/internProgram.service';
 
 // Create an internship program
 export const createInternProgram = async (req: Request, res: Response) => {
@@ -22,5 +23,26 @@ export const getInternPrograms = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching internship programs:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const updateInternProgramController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const result = await updateInternProgram(id, data);
+    res.status(200).json({ message: 'Intern program updated successfully', result });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating intern program', error });
+  }
+};
+
+export const deleteInternProgramController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await deleteInternProgram(id);
+    res.status(200).json({ message: 'Intern program deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting intern program', error });
   }
 };
