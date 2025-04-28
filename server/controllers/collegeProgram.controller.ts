@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as collegeProgramService from "../services/collegeProgram.service";
+import { updateCollegeProgram, deleteCollegeProgram } from '../services/collegeProgram.service';
 
 // Create a new program record for a specific college; the collegeId is passed in the URL.
 export const addProgramToCollege = async (req: Request, res: Response) => {
@@ -24,5 +25,26 @@ export const getProgramsByCollege = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching college programs:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const updateCollegeProgramController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const result = await updateCollegeProgram(Number(id), data);
+    res.status(200).json({ message: 'College program updated successfully', result });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating college program', error });
+  }
+};
+
+export const deleteCollegeProgramController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await deleteCollegeProgram(Number(id));
+    res.status(200).json({ message: 'College program deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting college program', error });
   }
 };

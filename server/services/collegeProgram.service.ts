@@ -20,3 +20,14 @@ export const getProgramsByCollege = async (collegeId: string) => {
     .execute();
   return programs.map(p => p.program);
 };
+
+export const updateCollegeProgram = async (
+  id: number,
+  data: { college_id?: string; program?: string }
+) => {
+  return db.update(collegePrograms).set(data).where(eq(collegePrograms.id, id));
+};
+
+export const deleteCollegeProgram = async (id: number) => {
+  return db.delete(collegePrograms).where(eq(collegePrograms.id, id));
+};
