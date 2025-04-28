@@ -22,3 +22,20 @@ export const getProgramDetails = async (courseCode: string) => {
     .execute();
   return result[0];
 };
+
+export const updateProgramDetails = async (courseCode: string, data: Partial<{
+  description?: string;
+  courseCode?: string;
+  title?: string;
+  startDate?: string;
+  duration?: string;
+  location?: string;
+  applyBy?: string;
+  img?: string;
+}>) => {
+  return db.update(program_details).set(data).where(eq(program_details.courseCode, courseCode));
+};
+
+export const deleteProgramDetails = async (courseCode: string) => {
+  return db.delete(program_details).where(eq(program_details.courseCode, courseCode));
+};
