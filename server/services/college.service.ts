@@ -74,3 +74,18 @@ export const updateCollegeStatus = async (collegeId: string, status: 'Approved' 
     .set({ status })
     .where(eq(colleges.id, collegeId));
 };
+
+export const updateCollege = async (id: string, data: Partial<{ 
+  name?: string; 
+  state?: string; 
+  city?: string; 
+  status?: string; 
+  created_at?: Date; 
+  updated_at?: Date; 
+}>) => {
+  return db.update(colleges).set(data).where(eq(colleges.id, id)).execute();
+};
+
+export const deleteCollege = async (id: string) => {
+  return db.delete(colleges).where(eq(colleges.id, id));
+};

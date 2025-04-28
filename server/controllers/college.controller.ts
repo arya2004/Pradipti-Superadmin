@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import * as collegeService from "../services/college.service";
-import { updateCollegeStatus } from '../services/college.service';
+import { updateCollegeStatus, updateCollege, deleteCollege } from '../services/college.service';
 
 // Create a new college with programs (collegeData: { id, name, state, city, status, programs: string[] })
 export const createCollege = async (req: Request, res: Response) => {
@@ -67,5 +67,26 @@ export const rejectCollege = async (req: Request, res: Response) => {
     res.status(200).json({ message: 'College rejected successfully.' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to reject college.' });
+  }
+};
+
+export const updateCollegeController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const result = await updateCollege(id, data);
+    res.status(200).json({ message: 'College updated successfully', result });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating college', error });
+  }
+};
+
+export const deleteCollegeController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await deleteCollege(id);
+    res.status(200).json({ message: 'College deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting college', error });
   }
 };
