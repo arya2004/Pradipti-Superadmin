@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as studentsService from "../services/students.service";
+import { updateStudentStatus } from '../services/students.service';
 
 export const createStudent = async (req: Request, res: Response) => {
   try {
@@ -20,5 +21,25 @@ export const getAllStudents = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const approveStudent = async (req: Request, res: Response) => {
+  const { studentId } = req.params;
+  try {
+    await updateStudentStatus(studentId, 'Approved');
+    res.status(200).json({ message: 'Student approved successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to approve student.' });
+  }
+};
+
+export const rejectStudent = async (req: Request, res: Response) => {
+  const { studentId } = req.params;
+  try {
+    await updateStudentStatus(studentId, 'Rejected');
+    res.status(200).json({ message: 'Student rejected successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to reject student.' });
   }
 };

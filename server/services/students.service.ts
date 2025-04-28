@@ -23,3 +23,9 @@ export const getStudentById = async (studentId: string) => {
 export const getAllStudents = async () => {
   return await db.select().from(students).execute();
 };
+
+export const updateStudentStatus = async (studentId: string, status: 'Approved' | 'Rejected') => {
+  return db.update(students)
+    .set({ status })
+    .where(eq(students.id, studentId));
+};

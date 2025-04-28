@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as collegeService from "../services/college.service";
+import { updateCollegeStatus } from '../services/college.service';
 
 // Create a new college with programs (collegeData: { id, name, state, city, status, programs: string[] })
 export const createCollege = async (req: Request, res: Response) => {
@@ -46,5 +47,25 @@ export const getCollegeById = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching college by id:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const approveCollege = async (req: Request, res: Response) => {
+  const { collegeId } = req.params;
+  try {
+    await updateCollegeStatus(collegeId, 'Approved');
+    res.status(200).json({ message: 'College approved successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to approve college.' });
+  }
+};
+
+export const rejectCollege = async (req: Request, res: Response) => {
+  const { collegeId } = req.params;
+  try {
+    await updateCollegeStatus(collegeId, 'Rejected');
+    res.status(200).json({ message: 'College rejected successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to reject college.' });
   }
 };

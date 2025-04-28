@@ -67,3 +67,10 @@ export const getCollegeById = async (collegeId: string) => {
     programs: programs.map(p => p.program)
   };
 };
+
+// Update the status of a college in the database.
+export const updateCollegeStatus = async (collegeId: string, status: 'Approved' | 'Rejected') => {
+  return db.update(colleges)
+    .set({ status })
+    .where(eq(colleges.id, collegeId));
+};
