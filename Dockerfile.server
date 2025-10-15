@@ -1,4 +1,7 @@
-FROM node:18-alpine
+FROM node:20-alpine
+
+# Update package manager and upgrade packages to reduce vulnerabilities
+RUN apk update && apk upgrade
 
 # Set the working directory in the container
 WORKDIR /usr/src/app/server
