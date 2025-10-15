@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: pradepti-backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: pradepti_user
+      DB_NAME: pradepti_db
+      DB_PASSWORD: pradepti_pass
+      PORT: 3000
+    depends_on:
+      - db
+    volumes:
+      - ./server:/usr/src/app/server
+      - /usr/src/app/server/node_modules
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: pradepti-frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/node_modules
+
+  db:
+    image: postgres:13
+    container_name: pradepti-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pradepti_user
+      POSTGRES_PASSWORD: pradepti_pass
+      POSTGRES_DB: pradepti_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

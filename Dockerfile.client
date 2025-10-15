@@ -1,0 +1,22 @@
+FROM node:18-alpine
+
+# Set the working directory in the container
+WORKDIR /usr/src/app/client
+
+# Copy package.json and package-lock.json (if available)
+COPY client/package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# Copy app source
+COPY client/ .
+
+# Build the app
+RUN npm run build
+
+# Expose the port the app runs on
+EXPOSE 5173
+
+# Define the command to run the app
+CMD [ "npm", "run", "preview" ]
